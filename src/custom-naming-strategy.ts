@@ -16,6 +16,10 @@ function parseName(
 
 export class CustomNamingStrategy extends SnakeNamingStrategy
   implements NamingStrategyInterface {
+  constructor() {
+    super();
+  }
+
   primaryKeyName(tableOrName: Table | string): string {
     return parseName('PK', tableOrName);
   }
