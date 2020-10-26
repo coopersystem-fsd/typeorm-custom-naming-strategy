@@ -1,4 +1,10 @@
-import { CustomNamingStrategy } from '../../src/custom-naming-strategy';
+import { Table } from 'typeorm';
+
+import { CustomNamingStrategy } from '../../src';
+
+function createTable(name: string) {
+  return new Table({ name });
+}
 
 describe('Custom naming strategy', () => {
   let strategy: CustomNamingStrategy;
@@ -8,6 +14,7 @@ describe('Custom naming strategy', () => {
 
   describe.each([
     ['cat', 'PK_cat'],
+    [createTable('cat'), 'PK_cat'],
     ['breed_type', 'PK_breed_type'],
   ])('primaryKeyName with table name: %s', (tableName, expectedKey) => {
     it(`should return the primary key name ${expectedKey}`, () => {
@@ -17,7 +24,10 @@ describe('Custom naming strategy', () => {
     });
   });
 
-  describe.each([['breed_type', 'cat', 'FK_breed_type_cat']])(
+  describe.each([
+    ['breed_type', 'cat', 'FK_breed_type_cat'],
+    [createTable('breed_type'), 'cat', 'FK_breed_type_cat'],
+  ])(
     'foreignKeyName with table name: %s',
     (tableName, referencedTablePath, expectedKey) => {
       it(`should return the foreign key name ${expectedKey}`, () => {
@@ -31,6 +41,7 @@ describe('Custom naming strategy', () => {
   describe.each([
     ['cat', ['name', 'owner_id'], 'UK_cat_name_owner_id'],
     ['breed_type', ['name'], 'UK_breed_type_name'],
+    [createTable('breed_type'), ['name'], 'UK_breed_type_name'],
     ['documento', ['rg', 'orgao_emissor'], 'UK_documento_rg_orgao_emissor'],
   ])(
     'uniqueConstraintName with table name: %s and columns: %j',
@@ -46,6 +57,7 @@ describe('Custom naming strategy', () => {
   describe.each([
     ['phone', ['number', 'area_code'], 'IDX_phone_number_area_code'],
     ['cat', ['name'], 'IDX_cat_name'],
+    [createTable('cat'), ['name'], 'IDX_cat_name'],
   ])(
     'indexName with table name: %s and columns: %s',
     (tableName, expression, expectedKey) => {
@@ -60,6 +72,7 @@ describe('Custom naming strategy', () => {
   describe.each([
     ['cat', 'lives', 'DF_cat_lives'],
     ['breed_type', 'name', 'DF_breed_type_name'],
+    [createTable('breed_type'), 'name', 'DF_breed_type_name'],
   ])(
     'defaultConstraintName with table name: %s and column: %s',
     (tableName, column, expectedKey) => {
