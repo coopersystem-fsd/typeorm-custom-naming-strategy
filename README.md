@@ -1,45 +1,11 @@
 # Coopersystem Naming Strategy for TypeORM
 
+![GitHub Workflow Status](https://img.shields.io/github/workflow/status/coopersystem-fsd/typeorm-custom-naming-strategy/CI)
+<a href="https://codecov.io/gh/coopersystem-fsd/typeorm-custom-naming-strategy">
+    <img src="https://codecov.io/gh/coopersystem-fsd/typeorm-custom-naming-strategy/branch/main/graph/badge.svg" />
+  </a>
+
 This package provide a custom naming strategies. The generated names are based on the column names.
-
-If you have a model like this:
-
-```ts
-class Cat {
-  @ManyToOne(
-    () => BreedType,
-    breedType => breedType.cats
-  )
-  @JoinColumn({ name: 'breed_type_id' })
-  breedType: BreedType;
-}
-```
-
-and
-
-```ts
-class BreedType {
-  @OneToMany(
-    () => Cat,
-    cat => cat.breedType
-  )
-  cats?: Cat[];
-}
-```
-
-The migration generate of this relation will be:
-
-- Primary Key
-
-```sql
-  CONSTRAINT "PK_cat" PRIMARY KEY ("id"))
-```
-
-- Foreign Key
-
-```sql
-  CONSTRAINT "FK_breed_type_cat" FOREIGN KEY ("breed_type_id") REFERENCES "breed_type"("id")
-```
 
 ## Examples
 
