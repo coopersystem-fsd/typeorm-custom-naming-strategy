@@ -43,7 +43,15 @@ The migration generate of this relation will be:
 
 ## Installation
 
-Is coming :D
+```sh
+yarn add @coopersystem-fsd/typeorm-naming-strategy
+```
+
+or with `npm`
+
+```sh
+npm i @coopersystem-fsd/typeorm-naming-strategy
+```
 
 ## Usage
 
