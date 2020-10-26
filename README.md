@@ -41,7 +41,19 @@ The migration generate of this relation will be:
   CONSTRAINT "FK_breed_type_cat" FOREIGN KEY ("breed_type_id") REFERENCES "breed_type"("id")
 ```
 
+## Examples
+
+| Contraint         | Table         | Column(s)                     | Result                        |
+|-------------------|---------------|-------------------------------|-------------------------------|
+| Primary Key       | user          | id                            | PK_user                       |
+| Foreign Key       | user -> photo | photo_id (user) -> id (photo) | FK_user_photo                 |
+| Unique Constraint | user          | email, social_security        | UK_user_email_social_security |
+| Index             | user          | first_name, last_name         | IDX_user_first_name_last_name |
+| Default           | user          | active                        | DF_user_active                |
+
 ## Installation
+
+> :warning: **Attention**: Under the hood we are using the package [typeorm-naming-strategies](https://github.com/tonivj5/typeorm-naming-strategies#readme) extending the strategy `SnakeNamingStrategy`.
 
 ```sh
 yarn add @coopersystem-fsd/typeorm-naming-strategy
@@ -88,5 +100,4 @@ module.exports = config;
 
 ## To Do
 
-- [ ] Create unit tests
-- [ ] Gerenate all constraints names
+- [ ] Generate check constraint names
