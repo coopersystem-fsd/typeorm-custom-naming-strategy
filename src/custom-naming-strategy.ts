@@ -49,4 +49,8 @@ export class CustomNamingStrategy extends SnakeNamingStrategy
   ): string {
     return parseName('DF', tableOrName, columnName);
   }
+
+  eagerJoinRelationAlias(alias: string, propertyPath: string): string {
+    return alias + '_' + propertyPath.replace('.', '_');
+  }
 }
