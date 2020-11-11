@@ -39,6 +39,26 @@ describe('Custom naming strategy', () => {
   );
 
   describe.each([
+    [
+      'telefone_representante_parceiro',
+      'telefone_id',
+      'FK_telefone_representante_parceiro_telefone_id',
+    ],
+  ])(
+    'foreignKeyName with max length == 60 table name: %s and columns: %s',
+    (tableName, referencedTablePath, expectedKey) => {
+      it(`should return the foreign key name ${expectedKey}`, () => {
+        strategy = new CustomNamingStrategy({
+          foreignKeyLength: 60,
+        });
+        const key = strategy.foreignKeyName(tableName, [], referencedTablePath);
+
+        expect(key).toBe(expectedKey);
+      });
+    }
+  );
+
+  describe.each([
     ['cat', ['name', 'owner_id'], 'UK_cat_name_owner_id'],
     ['breed_type', ['name'], 'UK_breed_type_name'],
     [createTable('breed_type'), ['name'], 'UK_breed_type_name'],
@@ -62,6 +82,26 @@ describe('Custom naming strategy', () => {
     'indexName with table name: %s and columns: %s',
     (tableName, expression, expectedKey) => {
       it(`should return the index name ${expectedKey}`, () => {
+        const key = strategy.indexName(tableName, expression);
+
+        expect(key).toBe(expectedKey);
+      });
+    }
+  );
+
+  describe.each([
+    [
+      'telefone_representante_parceiro',
+      ['telefone_id'],
+      'IDX_telefone_representante_parceiro_telefone_id',
+    ],
+  ])(
+    'indexName with max length == 60 table name: %s and columns: %s',
+    (tableName, expression, expectedKey) => {
+      it(`should return the index name ${expectedKey}`, () => {
+        strategy = new CustomNamingStrategy({
+          indexLength: 60,
+        });
         const key = strategy.indexName(tableName, expression);
 
         expect(key).toBe(expectedKey);

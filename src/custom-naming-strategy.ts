@@ -4,19 +4,28 @@ import { SnakeNamingStrategy } from 'typeorm-naming-strategies';
 function parseName(
   prefix: string,
   tableOrName: Table | string,
-  suffix?: string | string[]
+  suffix?: string | string[],
+  length = 30
 ) {
   const tableName =
     tableOrName instanceof Table ? tableOrName.name : tableOrName;
 
   suffix = Array.isArray(suffix) ? suffix.join('_') : suffix;
 
-  return `${prefix}_${tableName}${suffix ? `_${suffix}` : ''}`.substr(0, 30);
+  return `${prefix}_${tableName}${suffix ? `_${suffix}` : ''}`.substr(
+    0,
+    length
+  );
+}
+
+interface CustomNamingStrategyOptions {
+  indexLength?: number;
+  foreignKeyLength?: number;
 }
 
 export class CustomNamingStrategy extends SnakeNamingStrategy
   implements NamingStrategyInterface {
-  constructor() {
+  constructor(private readonly _options?: CustomNamingStrategyOptions) {
     super();
   }
 
@@ -29,7 +38,12 @@ export class CustomNamingStrategy extends SnakeNamingStrategy
     _: string[],
     referencedTablePath?: string
   ): string {
-    return parseName('FK', tableOrName, referencedTablePath);
+    return parseName(
+      'FK',
+      tableOrName,
+      referencedTablePath,
+      this._options?.foreignKeyLength
+    );
   }
 
   uniqueConstraintName(
@@ -40,7 +54,7 @@ export class CustomNamingStrategy extends SnakeNamingStrategy
   }
 
   indexName(tableOrName: Table | string, columns: string[]): string {
-    return parseName('IDX', tableOrName, columns);
+    return parseName('IDX', tableOrName, columns, this._options?.indexLength);
   }
 
   defaultConstraintName(
